@@ -3,8 +3,12 @@ package com.aelion.mycrm.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,7 +30,7 @@ public class PersonController {
 	}
 	
 	@GetMapping("/all")
-	@CrossOrigin
+	@CrossOrigin(origins="http://localhost:4200")
 	public List<Person> getPersons() {
 		ArrayList<Person> persons = new ArrayList<Person>();
 		
@@ -34,5 +38,14 @@ public class PersonController {
 		persons.add(new Person("Latte", "Truddy"));
 		
 		return persons;
+	}
+	
+	@PostMapping()
+	@CrossOrigin(origins="http://localhost:4200")
+	public Person addPerson(@RequestBody() Person person, HttpServletResponse response ) {
+		System.out.println("Got " + person.lastName);
+		response.setStatus(201);
+		
+		return person;
 	}
 }
