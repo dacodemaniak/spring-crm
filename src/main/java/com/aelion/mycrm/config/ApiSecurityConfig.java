@@ -37,8 +37,9 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	public void configure(WebSecurity web) throws Exception {
 		web.ignoring().antMatchers(
-				"/signin",
-				"/signup"
+				"/user/signin",
+				"/user/signup",
+				"/user/secret"
 			);
 	}
 	
@@ -55,7 +56,7 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
 			.csrf()
 			.disable()
 			.authorizeRequests()
-			.antMatchers("/signin", "/signout")
+			.antMatchers("/user/signin", "/user/signup", "/user/secret")
 			.permitAll()
 			.anyRequest()
 			.authenticated()

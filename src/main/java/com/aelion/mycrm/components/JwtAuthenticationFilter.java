@@ -12,11 +12,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.aelion.mycrm.exceptions.JwtTokenMissingException;
 import com.aelion.mycrm.services.UserAuthService;
 
+@Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	@Autowired
 	private JwtUtil jwtUtil;
@@ -30,11 +32,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		// Get Authorization header
 		String header = request.getHeader("Authorization");
 		
-		if (header == null || !header.startsWith("HTTP_TOKEN")) {
+		if (header == null || !header.startsWith("Bearer")) {
 			throw new JwtTokenMissingException("No JWT token found in the request headers");
 		}
 		
-		String token = header.substring("HTTP_TOKEN".length() + 1);
+		String token = header.substring("Bearer".length() + 1);
 		
 		this.jwtUtil.validateToken(token);
 		

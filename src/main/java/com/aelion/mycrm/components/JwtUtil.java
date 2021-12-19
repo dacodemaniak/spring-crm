@@ -1,20 +1,24 @@
 package com.aelion.mycrm.components;
 
+import java.security.Key;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.stereotype.Component;
 
 import com.aelion.mycrm.exceptions.JwtTokenMalformedException;
 import com.aelion.mycrm.exceptions.JwtTokenMissingException;
-import com.aelion.mycrm.models.User;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.SignatureException;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+@Component
 public class JwtUtil {
 	@Value("${jwt.secret}")
 	private String jwtSecret;
@@ -37,17 +41,18 @@ public class JwtUtil {
 	public String generateToken(Authentication authentication) {
 		User user = (User) authentication.getPrincipal();
 		
-		Claims claims = Jwts.claims().setSubject(user.getUserName());
+		Claims claims = Jwts.claims().setSubject(user.getUsername());
 		
 		final long now = System.currentTimeMillis();
 		final long expire = now + this.tokenValidity;
 		
 		Date expirationDate = new Date(expire);
 		
+		
 		return Jwts.builder().setClaims(claims)
 				.setIssuedAt(new Date(now))
 				.setExpiration(expirationDate)
-				.signWith(SignatureAlgorithm.HS512, this.jwtSecret)
+				.signWith(this.getSigninKey(), SignatureAlgorithm.HS256)
 				.compact();
 	}
 	
@@ -61,5 +66,10 @@ public class JwtUtil {
 		} catch (IllegalArgumentException e) {
 			throw new JwtTokenMissingException("JWT claims string is empty");
 		}
+	}
+	
+	private Key getSigninKey() {
+		byte[] keyBytes = Decoders.BASE64.decode(this.jwtSecret);
+		return Keys.hmacShaKeyFor(keyBytes);
 	}
 }
