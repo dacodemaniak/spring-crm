@@ -25,7 +25,7 @@ public class PersonController {
 	@Autowired
 	private ContactService contactService;
 	
-	@GetMapping()
+	@GetMapping("/all")
 	@CrossOrigin
 	public List<String> getDummy() {
 		// Your logic here !
@@ -36,15 +36,12 @@ public class PersonController {
 		return persons;
 	}
 	
-	@GetMapping("/all")
+	@GetMapping()
 	@CrossOrigin(origins="http://localhost:4200")
-	public List<Person> getPersons() {
-		ArrayList<Person> persons = new ArrayList<Person>();
+	public ResponseEntity<List<Person>> getPersons() {
+		ArrayList<Person> persons = (ArrayList<Person>) this.contactService.all();
 		
-		persons.add(new Person("Aubert", "Jean-Luc"));
-		persons.add(new Person("Latte", "Truddy"));
-		
-		return persons;
+		return ResponseEntity.status(HttpStatus.OK).body(persons);
 	}
 	
 	@PostMapping()

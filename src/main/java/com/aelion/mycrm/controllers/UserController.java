@@ -39,7 +39,8 @@ public class UserController {
 	@Autowired
 	private UserAuthService userAuthService;
 	
-	@Autowired AuthenticationManager authenticationManager;
+	@Autowired 
+	private AuthenticationManager authenticationManager;
 	
 	@GetMapping("/secret")
 	public String generateSafeSecret() {
@@ -60,8 +61,11 @@ public class UserController {
 		try {
 			authentication = this.authenticationManager
 				.authenticate(
-						new UsernamePasswordAuthenticationToken(request.getUserName(), request.getUserPass())
-				);
+					new UsernamePasswordAuthenticationToken(
+						request.getUserName(),
+						request.getUserPass()
+					)
+			);
 			
 		} catch (DisabledException e) {
 			throw new DisabledUserException("User was disabled");
@@ -69,12 +73,18 @@ public class UserController {
 			throw new InvalidUserCredentialsException("Invalid credentials");
 		}
 		
+		// Got a Spring Security User
 		User user = (User) authentication.getPrincipal();
 		
-		Set<String> roles = user.getAuthorities().stream().map(r -> r.getAuthority()).collect(Collectors.toSet());
+		Set<String> roles = user
+				.getAuthorities()
+				.stream().map(r -> r.getAuthority())
+				.collect(Collectors.toSet());
 		
+		// Make a token from "authentication" object
 		String token = jwtUtil.generateToken(authentication);
 		
+		// Create a Response DTO to send to client
 		Response response = new Response();
 		response.setToken(token);
 		response.setRoles(roles.stream().collect(Collectors.toList()));
