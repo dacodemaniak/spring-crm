@@ -47,5 +47,4 @@ public class UserRole {
 	public User getUser() {
 		return this.user;
 	}
-	
 }

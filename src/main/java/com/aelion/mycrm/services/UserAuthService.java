@@ -1,6 +1,7 @@
 package com.aelion.mycrm.services;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -50,7 +51,9 @@ public class UserAuthService implements UserDetailsService {
 	}
 	
 	public void saveUser(Request request) {
-		if (this.userRepository.findByUserName(request.getUserName()).isPresent()) {
+		Optional<User> oUser = this.userRepository.findByUserName(request.getUserName());
+		
+		if (oUser.isPresent()) {
 			throw new RuntimeException("User already exists");
 		}
 		

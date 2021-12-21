@@ -38,11 +38,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		
 		String token = header.substring("Bearer".length() + 1);
 		
-		this.jwtUtil.validateToken(token);
+		//this.jwtUtil.validateToken(token);
 		
 		String userName = this.jwtUtil.getUserName(token);
 		
-		UserDetails userDetails = this.userAuthService.loadUserByUsername(userName);
+		UserDetails userDetails = this.userAuthService
+				.loadUserByUsername(userName);
 		
 		UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
 				userDetails,

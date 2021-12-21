@@ -59,6 +59,7 @@ public class User {
 			r.setUser(this);
 		}
 	}
+	
 	public Set<UserRole> getUserRoles() {
 		return this.userRoles;
 	}

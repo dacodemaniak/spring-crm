@@ -28,9 +28,14 @@ public class JwtUtil {
 	
 	public String getUserName(final String token) {
 		try {
-			Claims body = Jwts.parserBuilder().setSigningKey(this.jwtSecret).build().parseClaimsJws(token).getBody();
+			Claims body = Jwts
+					.parserBuilder()
+					.setSigningKey(this.jwtSecret)
+					.build()
+					.parseClaimsJws(token)
+					.getBody();
 			
-			return body.getSubject();
+			return body.getSubject(); // Clear username
 		} catch(Exception e) {
 			System.out.println(e.getMessage() + " => " + e);
 		}
