@@ -23,7 +23,7 @@ import com.aelion.mycrm.services.UserAuthService;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private UserAuthService userAuthService;
@@ -33,6 +33,9 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	private ApiAuthenticationEntryPoint authenticationEntryPoint;
+	
+	@Autowired
+	PasswordEncoder passwordEncoder;
 	
 	@Override
 	public void configure(WebSecurity web) throws Exception {
@@ -45,7 +48,7 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
 	public void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(this.userAuthService).passwordEncoder(this.passwordEncoder());
+		auth.userDetailsService(this.userAuthService).passwordEncoder(this.passwordEncoder);
 	}
 	
 	@Override
@@ -81,10 +84,5 @@ public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	public AuthenticationManager authenticationManagerBean() throws Exception {
 		return super.authenticationManager();
-	}
-	
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
 	}
 }

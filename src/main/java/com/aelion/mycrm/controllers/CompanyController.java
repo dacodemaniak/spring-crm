@@ -3,6 +3,7 @@ package com.aelion.mycrm.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +19,8 @@ public class CompanyController {
 	@Autowired
 	private CompanyService service;
 	
+	
+	@PreAuthorize("hasRole='ADMIN'")
 	@PostMapping()
 	@CrossOrigin
 	public ResponseEntity<Company> create(@RequestBody Company company) {
@@ -25,6 +28,5 @@ public class CompanyController {
 				this.service.add(company),
 				HttpStatus.CREATED
 		);
-				
 	}
 }
