@@ -4,6 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -15,8 +17,15 @@ public class Person {
 	
 	private String lastName;
 	private String firstName;
-	private String occupation;
-	private String company;
+	
+	@ManyToOne
+	@JoinColumn(name="occupation_id")
+	private Occupation occupation;
+	
+	@ManyToOne
+	@JoinColumn(name="company_id")
+	private Company company;
+	
 	private String zipCode;
 	private String streetName;
 	private String city;
@@ -37,16 +46,16 @@ public class Person {
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
-	public String getOccupation() {
+	public Occupation getOccupation() {
 		return occupation;
 	}
-	public void setOccupation(String occupation) {
+	public void setOccupation(Occupation occupation) {
 		this.occupation = occupation;
 	}
-	public String getCompany() {
+	public Company getCompany() {
 		return company;
 	}
-	public void setCompany(String company) {
+	public void setCompany(Company company) {
 		this.company = company;
 	}
 	public String getZipCode() {

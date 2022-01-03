@@ -1,0 +1,24 @@
+type Query {
+	personById(id: ID): Person
+}
+
+type Person {
+	id: ID
+	lastName: String
+	firstName: String
+	occupation: Occupation
+	company: Company
+	zipCode: String
+	streetName: String
+	city: String
+}
+
+type Occupation {
+	id: ID
+	name: String
+}
+
+type Company {
+	id: ID
+	name: String
+}
